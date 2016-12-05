@@ -6,7 +6,7 @@
 /*   By: etrobert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/02 14:59:56 by etrobert          #+#    #+#             */
-/*   Updated: 2016/12/02 17:32:30 by afourcad         ###   ########.fr       */
+/*   Updated: 2016/12/05 19:33:50 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@
 
 int		main(int argc, char **argv)
 {
-	char	*str;
+	char	*line;
 	int		fd;
 
 	if (argc != 2)
 	{
-		printf("Too few parameters !\n");
+		printf("Parameters error !\n");
 		return (0);
 	}
-	str = NULL;
-	if ((fd = open(argv[1]), O_RDONLY) == -1)
-		return (0);
-	while ((get_next_line(fd, &str)) == 1)
-		;
-	ft_putstr(str);
+	line = NULL;
+	if ((fd = open(argv[1], O_RDONLY)) < 0)
+		return (-1);
+	get_next_line(fd, &line);
+		ft_putstr(line);
+		ft_putchar('\n');
 	return (0);
 }
