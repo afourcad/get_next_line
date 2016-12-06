@@ -6,7 +6,7 @@
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 15:52:53 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/05 19:32:31 by afourcad         ###   ########.fr       */
+/*   Updated: 2016/12/06 18:59:06 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 
-# define BUFF_SIZE 2
+# define BUFF_SIZE 5
 
 int	get_next_line(const int fd, char **line);
 
