@@ -6,7 +6,7 @@
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 15:52:53 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/06 18:59:06 by afourcad         ###   ########.fr       */
+/*   Updated: 2016/12/07 17:28:36 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,17 @@
 
 # include "libft.h"
 
-# define BUFF_SIZE 5
+# define BUFF_SIZE 20
 
-int	get_next_line(const int fd, char **line);
+typedef struct	s_linefile
+{
+	int		fd;
+	char	tmp[BUFF_SIZE + 1];
+	int		tmp_size;
+	int		loop;
+	int		ret;
+}				t_linefile;
+
+int				get_next_line(const int fd, char **line);
 
 #endif
