@@ -6,7 +6,7 @@
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 15:52:53 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/07 17:28:36 by afourcad         ###   ########.fr       */
+/*   Updated: 2016/12/12 19:31:02 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,13 @@
 # include "libft.h"
 
 # define BUFF_SIZE 20
+# define EOL '\n'
 
-typedef struct	s_linefile
+typedef struct	s_tmp
 {
-	int		fd;
-	char	tmp[BUFF_SIZE + 1];
-	int		tmp_size;
-	int		loop;
-	int		ret;
-}				t_linefile;
+	char	*tmp;
+	int	ln;
+}				t_tmp;
 
 int				get_next_line(const int fd, char **line);
 
