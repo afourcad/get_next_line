@@ -1,129 +1,73 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line.c                                   :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/01 19:09:07 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/12 19:51:13 by afourcad         ###   ########.fr       */
+/*   Created: 2016/12/13 16:58:17 by afourcad          #+#    #+#             */
+/*   Updated: 2016/12/13 21:16:38 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft.h"
 
-static char	*ft_stralloc(char **line, char *buff, int *loop, int ret)
+//s occuper de bien fnir la copie entre tmp et line
+//utiliser **line ou *line
+//la fonction doit elle etre en void ou renvoyer un char *
+void	ft_get_alloc_line(t_buff *buff, char *line)
 {
 	char	*tmp;
 	int		size;
 
-	size = BUFF_SIZE * (*loop);
-	printf("loop: %d\n", *loop);
-	if ((tmp = (char *)malloc(sizeof(char) * (size + ret))) == NULL)
+	size = buff->size_line + buff->eol;
+	if ((tmp = (char *)malloc(sizeof(*tmp) * (size))) == NULL)
 		return (NULL);
 	if (*line != NULL)
-		tmp = ft_memcpy(tmp, *line, size);
-	tmp = ft_memcpy(tmp + size, buff, ret);
-	tmp[size + ret] = '\0';
-	return (tmp - size);
+		tmp = ft_memcpy(tmp, line, buff->size_line);
+	tmp = ft_memcpy(tmp + buff->size_line, buff->buff + buff->start, buff->eol);
+	buff->size_line = buff->size_line + buff->eol;
+	return (tmp - buff->size_line);
 }
 
-static int	ft_find_n(char *buff, int ret)
+int		ft_get_buff(t_buff *buff, char **line)
 {
-	int		i;
+	int i;
 
-	i = 0;
-	while (i <= ret)
+	if (!(buff->buff))
+		return (0);
+	i = buff->start;
+	while (i < buff->ret)
 	{
-		if (buff[i] == EOL)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-static int	ft_find_tmp_n(t_tmp *tmp, char **line)
-{
-	int		i;
-	char	*tmp2;
-
-	i = 0;
-	tmp2 = tmp->tmp;
-	while (i < tmp->ln)
-	{
-		if (tmp->tmp[i] == EOL)
+		if (buff->buff[i] == EOL)
 		{
-			tmp->ln = tmp->ln - i;
-			free(tmp->tmp);
-			tmp->tmp = ft_memalloc(tmp->ln);
-			tmp->tmp = ft_memcpy(tmp->tmp, tmp2 + i + 1, tmp->ln);
-			free(tmp2);
+			buff->eol = i;
+			*line = ft_get_alloc_line(buff, *line);
+			buff->start = i + 1;
 			return (1);
 		}
-		*line[i] = tmp->tmp[i];
 		i++;
 	}
-	free(tmp2);
-	ft_memdel((void**)tmp->tmp);
-	tmp->ln = 0;
-	return (0);
-}
-static int	ft_get_read_line(int fd, char **line, t_tmp *tmp, int *loop)
-{
-	char	buff[BUFF_SIZE + 1];
-	int		ret;
-	int		i;
-
-	(void)tmp;
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
-	{
-		buff[ret] = '\0';
-		if ((i = ft_find_n(buff, ret)) >= 0)
-		{
-			*line = ft_stralloc(line, buff, loop, i);
-			printf("loop: %d // ret = %d // line = |%s|\n", *loop, ret, *line);
-			*tmp = ft_memcpy(*tmp, buff + i + 1, BUFF_SIZE - i - 1);
-			i = BUFF_SIZE - i;
-			return (1);
-		}
-		else
-		{
-			*line = ft_stralloc(line, buff, loop, ret);	
-		}
-		++(*loop);
-	}
+	buff->eol = buff->ret;
+	*line = ft_get_alloc_line(buff, *line);
 	return (0);
 }
 
-int			get_next_line(const int fd, char **line)
+int		get_next_line(const int fd, char **line)
 {
-	static t_tmp	*tmp;
-	int			loop;
+	static t_buff	buff = {NULL, 0, 0, BUFF_SIZE, 0};
 
-	free(*line);
-	*line = NULL;
-	tmp->tmp = NULL;
-	loop = 0;
-	if (tmp->tmp != NULL) //si mon tmp contient l ancien buff et qu il contient un EOL
-		if(ft_get_read_line(tmp, line))
+	if (buff.buff != NULL)
+		if (ft_get_buff(&buff, line))
 			return (1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	buff.buff = ft_memalloc(BUFF_SIZE + 1);
+	while ((buff.ret = read(fd, buff.buff, BUFF_SIZE)) > 0)
 	{
-		buff[ret] = '\0';
-		if ((i = ft_find_n(buff, ret)) >= 0)
-		{
-			*line = ft_stralloc(line, buff, loop, i);
-			printf("loop: %d // ret = %d // line = |%s|\n", *loop, ret, *line);
-			*tmp = ft_memcpy(*tmp, buff + i + 1, BUFF_SIZE - i - 1);
-			i = BUFF_SIZE - i;
+		if (ft_get_buff(&buff, line))
 			return (1);
-		}
-		else
-		{
-			*line = ft_stralloc(line, buff, loop, ret);	
-		}
-		++(*loop);
 	}
+	if (buff.ret == -1)
+		return (-1);
 	return (0);
 }

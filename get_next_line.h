@@ -6,7 +6,7 @@
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 15:52:53 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/12 19:31:02 by afourcad         ###   ########.fr       */
+/*   Updated: 2016/12/13 20:57:16 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 # define BUFF_SIZE 20
 # define EOL '\n'
 
-typedef struct	s_tmp
+typedef struct	s_buff
 {
-	char	*tmp;
-	int	ln;
-}				t_tmp;
-
+	char	*buff;
+	int		start;
+	int		eol;
+	int		ret;
+	int		size_line;
+}				t_buff;
 int				get_next_line(const int fd, char **line);
 
 #endif
