@@ -6,7 +6,7 @@
 /*   By: etrobert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/02 14:59:56 by etrobert          #+#    #+#             */
-/*   Updated: 2016/12/13 19:54:39 by afourcad         ###   ########.fr       */
+/*   Updated: 2016/12/14 19:17:45 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int		main(int argc, char **argv)
 	}
 	if ((fd = open(argv[1], O_RDONLY)) < 0)
 		return (-1);
-	get_next_line(fd, &line);
-		ft_putstr(line);
-		ft_putchar('\n');
+	while ((get_next_line(fd, &line)) == 1)
+		printf("--------%s--------\n", line);
 	return (0);
 }
