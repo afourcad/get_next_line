@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                   :+:      :+:    :+:    */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/13 16:58:17 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/14 19:51:10 by afourcad         ###   ########.fr       */
+/*   Created: 2016/12/15 17:17:47 by afourcad          #+#    #+#             */
+/*   Updated: 2016/12/15 17:17:49 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*ft_get_alloc_line(t_buff *buff, char *line)
 	tmp = ft_memadd(tmp, buff->buff, buff->size_line, buff->eol);
 	tmp[size] = '\0';
 	buff->size_line = buff->size_line + buff->eol;
+	free(line);
 	return (tmp);
 }
 
@@ -38,7 +39,7 @@ int		ft_get_buff(t_buff *buff, char **line)
 	i = 0;
 	while (i < buff->ret)
 	{
-		if (buff->buff[i] == EOL || buff->buff[i] == EOF)
+		if (buff->buff[i] == EOL)
 		{
 			buff->eol = i;
 			*line = ft_get_alloc_line(buff, *line);
@@ -50,6 +51,7 @@ int		ft_get_buff(t_buff *buff, char **line)
 	}
 	buff->eol = i;
 	*line = ft_get_alloc_line(buff, *line);
+	buff->ret = 0;
 	return (0);
 }
 
@@ -57,7 +59,8 @@ int		get_next_line(const int fd, char **line)
 {
 	static t_buff	buff = {.eol = 0, .ret = 0, .size_line = 0};
 
-	free(*line);
+	if (line == NULL || fd < 0)
+		return (-1);
 	*line = NULL;
 	if (buff.ret != 0)
 		if (ft_get_buff(&buff, line))
@@ -72,5 +75,10 @@ int		get_next_line(const int fd, char **line)
 	}
 	if (buff.ret == -1)
 		return (-1);
+	if (buff.ret == 0 && buff.size_line > 0)
+	{
+		buff.size_line = 0;
+		return (1);
+	}
 	return (0);
 }
