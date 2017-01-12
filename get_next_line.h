@@ -6,7 +6,7 @@
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 15:52:53 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/15 17:42:00 by afourcad         ###   ########.fr       */
+/*   Updated: 2017/01/09 18:51:39 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 
-# define BUFF_SIZE 1
+# define BUFF_SIZE 4
 # define EOL '\n'
 
 typedef struct	s_buff

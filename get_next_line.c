@@ -6,7 +6,7 @@
 /*   By: afourcad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 17:17:47 by afourcad          #+#    #+#             */
-/*   Updated: 2016/12/15 17:17:49 by afourcad         ###   ########.fr       */
+/*   Updated: 2017/01/09 18:41:16 by afourcad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_get_alloc_line(t_buff *buff, char *line)
 	int		size;
 
 	size = buff->size_line + buff->eol;
-	if ((tmp = (char *)malloc(sizeof(*tmp) * (size))) == NULL)
+	if ((tmp = (char *)malloc(sizeof(*tmp) * (size + 1))) == NULL)
 		return (NULL);
 	if (line != NULL)
 		tmp = ft_memcpy(tmp, line, buff->size_line);
@@ -45,6 +45,7 @@ int		ft_get_buff(t_buff *buff, char **line)
 			*line = ft_get_alloc_line(buff, *line);
 			buff->ret = buff->ret - i - 1;
 			ft_memmove(buff->buff, buff->buff + i + 1, buff->ret);
+			buff->size_line = 0;
 			return (1);
 		}
 		i++;
@@ -68,10 +69,7 @@ int		get_next_line(const int fd, char **line)
 	while ((buff.ret = read(fd, buff.buff, BUFF_SIZE)) > 0)
 	{
 		if (ft_get_buff(&buff, line))
-		{
-			buff.size_line = 0;
 			return (1);
-		}
 	}
 	if (buff.ret == -1)
 		return (-1);
